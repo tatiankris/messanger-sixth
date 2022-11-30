@@ -16,14 +16,12 @@ export const authAPI = {
         return instance.get('/auth/me', {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
     },
 }
-// authAPI.login('user1');
 
 export const usersAPI = {
-    users() {
+    usernames() {
         return instance.get('/auth/users')
     }
 }
-
 
 export const messagesAPI = {
     sendMessage(data: SendMessageType) {
@@ -36,12 +34,6 @@ export const messagesAPI = {
         return instance.post('/messages/out', {username})
     }
 }
-// messagesAPI.sendMessage({
-//     sender: 'user1',
-//     recipient: 'user2',
-//     title: 'string',
-//     message: 'string',
-// });
 
 export type SendMessageType = {
     sender: string

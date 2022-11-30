@@ -2,22 +2,25 @@ import {Button, Paper, Stack, ToggleButton, ToggleButtonGroup} from '@mui/materi
 import React, {useCallback, useEffect, useState} from 'react';
 import MainPage from "./MainPage";
 import Message from "./Message";
-import {useAppDispatch} from "../hooks/hooks";
+import {useAppDispatch, useAppSelector, useInterval} from "../hooks/hooks";
 import {messagesAPI} from "../api/sixth-api";
+import {getInMessageTC, getOutMessageTC} from "../store/authReducer";
+import s from './Styles.module.css'
+import LoopIcon from '@mui/icons-material/Loop';
 
 function Messages () {
 
-    let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as Array<number>
-    console.log(arr.length)
+    const inMessages = useAppSelector(state => state.auth.user.inMessage)
+    const outMessages = useAppSelector(state => state.auth.user.outMessage)
 
     const dispatch = useAppDispatch();
-    // const [incoming, setIncoming] = useState(true)
+    // const [messagesShow, setMessagesShow] = useState(inMessages)
 
     // const getSpecificMessages = (incoming: boolean) => {
     //     setIncoming(incoming)
     //
     //     if (incoming) {
-    //         // dispatch(getInMessages())
+    //         dispatch(getInMessages())
     //     }
     //
     //     if (!incoming) {
@@ -26,50 +29,41 @@ function Messages () {
     // }
 
     useEffect(() => {
-        // dispatch(getInMessages())
+        dispatch(getInMessageTC())
+
     }, [])
+
+    useInterval(() => {
+        dispatch(getInMessageTC())
+        }, 5000)
 
     const [value, setValue] = React.useState('incoming');
 
-    const [resData, setResData] = React.useState([])
+    // const [resData, setResData] = React.useState([])
 
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
     ) => {
         setValue(newAlignment);
-        if (newAlignment === 'incoming') {
-            // dispatch(getInMessages())
-            messagesAPI.outMessages('user3')
-                .then(res => {
-                    console.log('ouRES', res.data)
-                    setResData(res.data)
-                })
-
-
-        } else  {
-            // dispatch(getOutMessages())
-            messagesAPI.outMessages('user3')
-                .then(res => {
-                    console.log('ouRES', res.data)
-                    setResData(res.data)
-                })
-
-        }
-
-
-
-
-
-
+        // if (newAlignment === 'outgoing') {
+        //     setMessagesShow(outMessages)
+        //
+        // } else  {
+        //     setMessagesShow(inMessages)
+        // }
 
     };
 
-
+    const handleUpload = () => {
+      dispatch(getInMessageTC())
+        // setMessagesShow(inMessages)
+    }
 
     return (
         <div style={{marginTop: 10}}>
-            <div style={{width: 900}}>
+            <div className={s.buttonGroup}>
+                <Stack direction={'row'}>
                 <ToggleButtonGroup
                     fullWidth={true}
                     color="standard"
@@ -81,23 +75,28 @@ function Messages () {
                     <ToggleButton  value="incoming">Incoming</ToggleButton>
                     <ToggleButton value="outgoing">Outgoing</ToggleButton>
                 </ToggleButtonGroup>
-                {/*<Button*/}
-                {/*    sx={{minWidth: 300}}*/}
-                {/*    onClick={() => getSpecificMessages(true)}*/}
-                {/*    color={incoming ? 'primary' : 'inherit'}*/}
-                {/*>Incoming</Button>*/}
-                {/*<Button*/}
-                {/*    sx={{minWidth: 300}}*/}
-                {/*    onClick={() => getSpecificMessages(false)}*/}
-                {/*    color={!incoming ? 'primary' : 'inherit'}*/}
-                {/*>Outgoing</Button>*/}
+                    {
+                        value !== 'outgoing' && <Button sx={{borderRadius: 16}} variant={'contained'} onClick={handleUpload}>
+                            <LoopIcon/></Button>
+                    }
+
+                </Stack>
             </div>
             <Stack margin={'10px 10px 0px 10px'} maxWidth={'900px'} spacing={2}>
                 {
-                    resData.length && resData.map((a, i) => {
-                        // @ts-ignore
-                        return <Message key={i} message={a.message} title={a.title} date={a.date} username={a.sender}/>
-                            })
+                    value !== 'outgoing' && inMessages.length && inMessages.map((a, i) => {
+
+                        return <Message key={a._id} message={a.message} title={a.title} date={a.date} incoming={value === 'outgoing' ? false : true} recipient={a.recipient} sender={a.sender}/>
+                            })}
+                {
+                    value === 'outgoing' && outMessages.length && outMessages.map((a, i) => {
+
+                    return <Message key={a._id} message={a.message} title={a.title} date={a.date} incoming={value === 'outgoing' ? false : true} recipient={a.recipient} sender={a.sender}/>
+                })}
+                {
+                    !inMessages.length || !outMessages.length && <div>
+                        No messages...
+                    </div>
                 }
             </Stack>
         </div>

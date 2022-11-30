@@ -3,12 +3,12 @@ type AppStatusType = 'loading' | 'succeeded'
 
 export type StateType = {
     status: AppStatusType
-    error: null | string
+    openMessage: boolean
 }
 
 let initialState = {
     status: 'succeeded',
-    error: null
+    openMessage: false
 } as StateType
 
 export const appReducer = (state: StateType = initialState, action: AppActionsType): StateType => {
@@ -17,8 +17,8 @@ export const appReducer = (state: StateType = initialState, action: AppActionsTy
         case 'app/SET-STATUS': {
             return {...state, status: action.status}
         }
-        case 'app/SET-ERROR': {
-            return {...state, error: action.error}
+        case 'app/SET-OPEN-MESSAGE': {
+            return {...state, openMessage: action.value}
         }
         default:
             return state
@@ -33,11 +33,11 @@ export const setAppStatusAC = (status: AppStatusType) => {
     } as const
 }
 
-export const setAppErrorAC = (error: string | null) => {
+export const setOpenMessageAC = (value: boolean) => {
     return {
-        type: 'app/SET-ERROR',
-        error
+        type: 'app/SET-OPEN-MESSAGE',
+        value
     } as const
 }
 
-export type AppActionsType = ReturnType<typeof setAppStatusAC> | ReturnType<typeof setAppErrorAC>
+export type AppActionsType = ReturnType<typeof setAppStatusAC> | ReturnType<typeof setOpenMessageAC>
