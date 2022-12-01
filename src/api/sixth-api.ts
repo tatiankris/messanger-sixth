@@ -2,10 +2,8 @@ import axios from "axios";
 
 
 export const instance = axios.create({
-    baseURL: 'http://localhost:5000',
-    // baseURL: 'https://back-fourth-tatiankris.vercel.app',
-    // baseURL: process.env.REACT_APP_BACK_URL || 'https://back-fourth-tatiankris.vercel.app/',
-    // withCredentials: true
+    // baseURL: 'http://localhost:5000',
+    baseURL: 'https://messanger-sixth-back.vercel.app',
 })
 
 export const authAPI = {
