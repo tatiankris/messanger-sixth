@@ -37,7 +37,7 @@ function SendField() {
 
     const submit = (values: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => {
         const empty = Object.values(values).find(v => v === '')
-        if (typeof empty === undefined) {
+        if (typeof empty === 'undefined') {
             dispatch(sendMessageTC(values))
             formikHelpers.resetForm({values: initialValues})
         } else {
