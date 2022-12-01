@@ -1,10 +1,8 @@
 import {Button, Paper, Stack, ToggleButton, ToggleButtonGroup} from '@mui/material';
-import React, {useCallback, useEffect, useState} from 'react';
-import MainPage from "./MainPage";
+import React, {useEffect} from 'react';
 import Message from "./Message";
 import {useAppDispatch, useAppSelector, useInterval} from "../hooks/hooks";
-import {messagesAPI} from "../api/sixth-api";
-import {getInMessageTC, getOutMessageTC} from "../store/authReducer";
+import {getInMessageTC} from "../store/authReducer";
 import s from './Styles.module.css'
 import LoopIcon from '@mui/icons-material/Loop';
 
@@ -14,19 +12,7 @@ function Messages () {
     const outMessages = useAppSelector(state => state.auth.user.outMessage)
 
     const dispatch = useAppDispatch();
-    // const [messagesShow, setMessagesShow] = useState(inMessages)
 
-    // const getSpecificMessages = (incoming: boolean) => {
-    //     setIncoming(incoming)
-    //
-    //     if (incoming) {
-    //         dispatch(getInMessages())
-    //     }
-    //
-    //     if (!incoming) {
-    //         // dispatch(getOutMessages())
-    //     }
-    // }
 
     useEffect(() => {
         dispatch(getInMessageTC())
@@ -39,25 +25,15 @@ function Messages () {
 
     const [value, setValue] = React.useState('incoming');
 
-    // const [resData, setResData] = React.useState([])
-
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
         newAlignment: string,
     ) => {
         setValue(newAlignment);
-        // if (newAlignment === 'outgoing') {
-        //     setMessagesShow(outMessages)
-        //
-        // } else  {
-        //     setMessagesShow(inMessages)
-        // }
-
     };
 
     const handleUpload = () => {
       dispatch(getInMessageTC())
-        // setMessagesShow(inMessages)
     }
 
     return (

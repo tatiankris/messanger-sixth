@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
 import {Grid, Paper, Toolbar} from "@mui/material";
-import SendField from "./SendField";
-import Login from "./Login";
-import Messages from "./Messages";
 import EmailIcon from '@mui/icons-material/Email';
 type MessagePropsType = {
     sender: string

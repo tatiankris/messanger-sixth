@@ -5,13 +5,6 @@ import {Autocomplete, Button, FormControl, FormGroup, FormHelperText, FormLabel,
 import {getInMessageTC, getUserNamesTC, sendMessageTC} from "../store/authReducer";
 import {useState} from "react";
 import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
-
-type FormikErrorType   = {
-    recipient ?: string;
-    title?: string;
-    message? : string;
-}
 
 export type FormikValues = {
     recipient: string;
