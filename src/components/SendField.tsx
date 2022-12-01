@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useAppDispatch, useAppSelector, useInterval} from "../hooks/hooks";
 import {Field, Form, Formik, FormikContext, FormikErrors, FormikHelpers, FormikState, useFormik} from "formik";
-import {Autocomplete, Button, FormControl, FormGroup, FormLabel, Paper, TextField} from "@mui/material";
+import {Autocomplete, Button, FormControl, FormGroup, FormHelperText, FormLabel, Paper, TextField} from "@mui/material";
 import {getInMessageTC, getUserNamesTC, sendMessageTC} from "../store/authReducer";
 import {useState} from "react";
 import {Simulate} from "react-dom/test-utils";
@@ -23,7 +23,7 @@ function SendField() {
     const dispatch = useAppDispatch();
 
     const userNames = useAppSelector(state => state.auth.usernames)
-    const [userName, setUserName] = useState('1')
+    const [helper, setHelper] = useState(false)
 
     useInterval(() => {
         dispatch(getUserNamesTC())
@@ -36,10 +36,16 @@ function SendField() {
     }
 
     const submit = (values: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => {
-        formikHelpers.resetForm({values: initialValues})
-        console.log('values', values)
-        dispatch(sendMessageTC(values))
-
+        const empty = Object.values(values).find(v => v === '')
+        if (typeof empty === undefined) {
+            dispatch(sendMessageTC(values))
+            formikHelpers.resetForm({values: initialValues})
+        } else {
+            setHelper(true)
+            setTimeout(() => {
+                setHelper(false)
+            }, 3000)
+        }
     }
 
     return (
@@ -52,13 +58,9 @@ function SendField() {
                             <Autocomplete
                                 fullWidth
                                 id="recipient"
-                                // name="recipient"
                                 options={userNames}
                                 value={values.recipient}
-                                // getOptionLabel={(option) => option.name}
-                                // style={{ width: 300 }}
                                 onChange={(e, value) => {
-                                    console.log(value);
                                     setFieldValue(
                                         "recipient",
                                         value !== null ? value : initialValues.recipient
@@ -99,7 +101,6 @@ function SendField() {
                                 sx={{marginTop: 8}}
                                 rows={6}
 
-
                             />
                             <div style={{marginTop: '30px'}}>
                                 <Button variant="contained" color="primary" type="submit">
@@ -114,7 +115,9 @@ function SendField() {
                                     Reset
                                 </Button>
                             </div>
-
+                            <FormHelperText error={helper} style={{fontSize: 'inherit', fontWeight: 'bold', marginTop: 10}}>
+                                {helper ? 'Each field is required!' : ' '}
+                            </FormHelperText>
 
 
                         </Form>

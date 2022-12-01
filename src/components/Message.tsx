@@ -33,12 +33,12 @@ function Message({sender, recipient, incoming, date, message, title}: MessagePro
                 <div style={{height: 34}}>
 
                     <div>
-                            <EmailIcon />
+
                     {
-                        incoming && <span style={{verticalAlign:'top'}}><span style={{fontFamily: 'Segoe Script', fontStyle:'italic'}}>from</span>{sender}</span>
+                        incoming && <div><EmailIcon color="primary" /><span style={{verticalAlign:'top'}}><span style={{fontFamily: 'Segoe Script', fontStyle:'italic', color: '#1976d2', marginRight: 10}}>from</span>{sender}</span></div>
                     }
                     {
-                        !incoming && <span style={{verticalAlign:'top'}}><span style={{fontFamily: 'Segoe Script', fontStyle:'italic'}}>to</span>{recipient}</span>
+                        !incoming && <div><EmailIcon color="action" /><span style={{verticalAlign:'top'}}><span style={{fontFamily: 'Segoe Script', fontStyle:'italic', color: '#757575', marginRight: 10}}>to</span>{recipient}</span></div>
                     }
                     </div>
 
@@ -53,7 +53,7 @@ function Message({sender, recipient, incoming, date, message, title}: MessagePro
             </Paper>
             {
                 open &&
-                <div style={{backgroundColor: 'rgba(230,230,250, 0.4)', padding: 6, marginTop: 6}}>
+                <div style={{backgroundColor: 'rgba(230,230,250, 0.4)', padding: 6, marginTop: 6, textAlign: 'start'}}>
                     {message}
                 </div>
             }

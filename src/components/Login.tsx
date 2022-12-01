@@ -19,7 +19,6 @@ function Login() {
                 setError(false)
             }, 2000)
         }
-        console.log('PRESS')
         dispatch(loginTC(name))
     }
 
